@@ -26,17 +26,9 @@ class Font {
       var bytes = await file.readAsBytes();
       var hex = bytes.toHex();
       var fontOffsetTableBuffer = bytes.sublist(position, 12).toHex();
-      position += 12;
 
-      // offset_table.major_version : 1
-      // offset_table.major_version : 0
-      // offset_table.major_version : 14
-      // offset_table.major_version : 128
-      // Position : 12
-      // found name
-      // current position : 2777952
-      // Font Name : NanumGothicCoding
-      // Font Name : 컲�о��T�)
+      // 12바이트 seek
+      position += 12;
 
       // 오프셋 테이블 파싱
       var offsetTable = OffsetTable(
@@ -45,12 +37,6 @@ class Font {
         numTables: fontOffsetTableBuffer.readU16BE(4),
         padding: fontOffsetTableBuffer.readU16BE(6),
       );
-
-      // 4바이트 스킵 처리
-      // position += 4;
-
-      // 1, 0, 14, 128 이면 성공
-      print(offsetTable.toString());
 
       if (offsetTable.majorVersion != 1 || offsetTable.minorVersion != 0) {
         throw Exception('This font is not True Type Font');
@@ -152,7 +138,7 @@ class Font {
       }
 
       for (final record in nameRecords) {
-        print("이 폰트의 이름은 {0} 입니다".replaceAll("{0}", record.name!));
+        print('이 폰트의 이름은 {0} 입니다'.replaceAll('{0}', record.name!));
       }
     } catch (e) {
       log(e.toString());
