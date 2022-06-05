@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:yaml/yaml.dart';
 
-///
 /// Loads the config file and returns the config object.
-///
 class ConfigLoader {
   static final ConfigLoader _instance = ConfigLoader._internal();
 
+  /// 설정 파일이 준비가 되어있는지 판단하는 변수
   bool _isReady = false;
   dynamic _slots = YamlMap();
 
@@ -17,6 +16,7 @@ class ConfigLoader {
   bool get ready => _isReady;
   dynamic get items => _slots;
 
+  /// `config.yaml` 파일을 비동기로 읽습니다.
   Future<void> readConfigFile() async {
     try {
       var configFile =

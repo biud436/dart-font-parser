@@ -4,6 +4,8 @@ import 'name_record.dart';
 import '../extension/bytes.dart';
 import '../utils/range.dart';
 
+/// 폰트를 파싱하는 클래스
+/// * `fontName`은 필수입니다.
 class Font {
   String? fontName;
   List<String>? fonts = [];

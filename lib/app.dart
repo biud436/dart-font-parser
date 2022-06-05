@@ -6,16 +6,18 @@ import 'package:dart_font_parser/src/config_loader.dart';
 
 import 'src/font/font.dart';
 
-/// The main entry point for the application.
+/// 메인 진입점입니다.
 class App<T extends List<String>> {
   final _parser = ArgParser()..addOption('font', abbr: 'f');
 
   T? arguments;
 
+  /// 생성자
   App(T arguments) {
     this.arguments = arguments;
   }
 
+  /// 폰트를 다운로드하고, 폰트 정보를 읽어옵니다.
   void start() async {
     var result = _parser.parse(arguments!);
 
@@ -33,13 +35,13 @@ class App<T extends List<String>> {
     await fontParser.parse();
   }
 
-  void _downloadFont(String fontName) async {
+  /// 폰트를 다운로드 받는 함수로 `private`로 선언되어있습니다.
+  /// * `fontName` - 폰트의 이름입니다.
+  void _downloadFont([String fontName='NanumGothicCoding']) async {
     try {
       var loader = ConfigLoader();
 
       waitFor(loader.readConfigFile());
-
-      print(loader.items['font']);
 
       var uri = Uri.parse(loader.items['font']['remotePath']);
 
@@ -51,6 +53,7 @@ class App<T extends List<String>> {
       final request = await HttpClient().getUrl(uri);
       final response = await request.close();
 
+      // 폰트 폴더가 없으면 새로 생성합니다.
       var dir = Directory('fonts');
       if (!await dir.exists()) {
         await dir.create();
