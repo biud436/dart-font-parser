@@ -15,6 +15,7 @@ font:
 폰트 파서를 실행하려면 다음과 같이 하세요. 테스트 폰트는 나눔고딕코딩 폰트입니다.
 
 ```bash
+dart pub get
 dart bin/dart_font_parser.dart --font=NanumGothicCoding
 ```
 
