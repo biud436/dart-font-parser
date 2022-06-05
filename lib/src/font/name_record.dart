@@ -5,7 +5,7 @@ class NameRecord {
   int? nameID = 0;
   int? stringLength = 0;
   int? stringOffset = 0;
-  String? name = "";
+  String? name = '';
   int? hexOffset = 0;
   
   NameRecord({
