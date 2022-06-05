@@ -1,0 +1,7 @@
+localization:
+    ko:
+        - title: 제목
+
+font:
+    remotePath: https://github.com/biud436/font-parser/raw/main/res/NanumGothicCoding.ttf
+    localPath: fonts/NanumGothicCoding.ttf

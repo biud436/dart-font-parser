@@ -1,8 +1,13 @@
-import 'dart:convert';
+import 'dart:cli';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:dart_font_parser/src/config_loader.dart';
 
+import 'src/font/font.dart';
+
+/// The main entry point for the application.
 class App<T extends List<String>> {
   final _parser = ArgParser()..addOption('font', abbr: 'f');
 
@@ -12,7 +17,7 @@ class App<T extends List<String>> {
     this.arguments = arguments;
   }
 
-  void start() {
+  void start() async {
     var result = _parser.parse(arguments!);
 
     if (!result.wasParsed('font')) {
@@ -21,21 +26,40 @@ class App<T extends List<String>> {
     }
     // ignore: unused_local_variable
     for (var arg in result.arguments) {
-      downloadFont(result['font']);
+      _downloadFont(result['font']);
     }
+
+    var fontParser = Font(fontName: result['font']);
+
+    await fontParser.parse();
   }
 
-  void downloadFont(String fontName) async {
-    var uri = Uri.parse(
-        'https://github.com/biud436/font-parser/raw/main/res/NanumGothicCoding.ttf');
-    final request = await HttpClient().getUrl(uri);
-    final response = await request.close();
+  void _downloadFont(String fontName) async {
+    try {
+      var loader = ConfigLoader();
 
-    var dir = Directory('fonts');
-    if (!await dir.exists()) {
-      await dir.create();
+      waitFor(loader.readConfigFile());
+
+      print(loader.items['font']);
+
+      var uri = Uri.parse(loader.items['font']['remotePath']);
+
+      var file = File('fonts/$fontName.ttf');
+      if (file.existsSync()) {
+        return;
+      }
+
+      final request = await HttpClient().getUrl(uri);
+      final response = await request.close();
+
+      var dir = Directory('fonts');
+      if (!await dir.exists()) {
+        await dir.create();
+      }
+
+      await response.pipe(File(loader.items['font']['localPath']).openWrite());
+    } catch (e) {
+      log(e.toString());
     }
-
-    await response.pipe(File('fonts/NanumGothicCoding.ttf').openWrite());
   }
 }
