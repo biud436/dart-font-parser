@@ -1,5 +1,4 @@
 import 'dart:cli';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:args/args.dart';
@@ -59,7 +58,7 @@ class App<T extends List<String>> {
 
       await response.pipe(File(loader.items['font']['localPath']).openWrite());
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
     }
   }
 }

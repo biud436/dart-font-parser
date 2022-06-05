@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:yaml/yaml.dart';
-import 'dart:developer';
 
 ///
 /// Loads the config file and returns the config object.
@@ -21,7 +20,7 @@ class ConfigLoader {
   Future<void> readConfigFile() async {
     try {
       var configFile =
-          [Directory.current.path, "lib/common/config.yaml"].join('/');
+          [Directory.current.path, 'lib/common/config.yaml'].join('/');
       if (!File(configFile).existsSync()) {
         throw Exception('Config file not found: $configFile');
       }
@@ -35,7 +34,7 @@ class ConfigLoader {
 
       _isReady = true;
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
     }
   }
 }
