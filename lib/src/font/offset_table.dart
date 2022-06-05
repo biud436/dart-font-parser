@@ -5,10 +5,10 @@ class OffsetTable {
   int? padding;
 
   OffsetTable({
-    this.majorVersion,
-    this.minorVersion,
-    this.numTables,
-    this.padding,
+    required this.majorVersion,
+    required this.minorVersion,
+    required this.numTables,
+    required this.padding,
   });
 
   @override

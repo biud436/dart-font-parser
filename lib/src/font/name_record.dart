@@ -9,13 +9,13 @@ class NameRecord {
   int? hexOffset = 0;
   
   NameRecord({
-    this.platformID,
-    this.encodingID,
-    this.languageID,
-    this.nameID,
-    this.stringLength,
-    this.stringOffset,
-    this.name,
+    required this.platformID,
+    required this.encodingID,
+    required this.languageID,
+    required this.nameID,
+    required this.stringLength,
+    required this.stringOffset,
+    required this.name,
     this.hexOffset,
   });
 }

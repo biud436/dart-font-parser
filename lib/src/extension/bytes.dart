@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:typed_data';
 
 extension ByteEx on String {
@@ -21,10 +20,8 @@ extension HexEx on Uint8List {
   String toHex() {
     return map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
-}
 
-Iterable<int> range(int low, int high) sync* {
-  for (var i = low; i < high; ++i) {
-    yield i;
-  }
+  int readU16BE(int startOffset, int endOffset) {
+    return int.parse(sublist(startOffset, endOffset).toHex(), radix: 16);
+  }  
 }

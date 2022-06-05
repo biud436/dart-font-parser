@@ -1,22 +1,18 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:dart_font_parser/src/font/offset_table.dart';
 import 'name_record.dart';
 import '../extension/bytes.dart';
-import 'dart:convert' show utf8;
+import '../utils/range.dart';
 
 class Font {
   String? fontName;
   List<String>? fonts = [];
 
-  Font({this.fontName});
+  Font({required this.fontName});
 
   Future<void> parse() async {
     try {
       var name = fontName!.trim();
-
-      print(name);
 
       var file = File('fonts/$name.ttf');
       if (!file.existsSync()) {
@@ -24,7 +20,6 @@ class Font {
       }
       var position = 0;
       var bytes = await file.readAsBytes();
-      var hex = bytes.toHex();
       var fontOffsetTableBuffer = bytes.sublist(position, 12).toHex();
 
       // 12바이트 seek
@@ -53,15 +48,9 @@ class Font {
             .join();
 
         var tagName = tagBuffer;
-        var checkSum = int.parse(
-            bytes.sublist(position + 4, position + 8).toHex(),
-            radix: 16);
-        var offset = int.parse(
-            bytes.sublist(position + 8, position + 12).toHex(),
-            radix: 16);
-        var length = int.parse(
-            bytes.sublist(position + 12, position + 16).toHex(),
-            radix: 16);
+        var checkSum = bytes.readU16BE(position + 4, position + 8);
+        var offset = bytes.readU16BE(position + 8, position + 12);
+        var length = bytes.readU16BE(position + 12, position + 16);
 
         print(
             '$i. tagName: $tagName checkSum: $checkSum, offset: $offset, length: $length');
@@ -81,14 +70,9 @@ class Font {
 
       position = nameTableOffset;
 
-      var formatSelector =
-          int.parse(bytes.sublist(position, position + 2).toHex(), radix: 16);
-      var nameRecordCount = int.parse(
-          bytes.sublist(position + 2, position + 4).toHex(),
-          radix: 16);
-      var storageOffset = int.parse(
-          bytes.sublist(position + 4, position + 6).toHex(),
-          radix: 16);
+      var formatSelector = bytes.readU16BE(position, position + 2);
+      var nameRecordCount = bytes.readU16BE(position + 2, position + 4);
+      var storageOffset = bytes.readU16BE(position + 4, position + 6);
 
       print(
           'formatSelector: $formatSelector. nameRecordCount: $nameRecordCount. storageOffset: $storageOffset');
@@ -104,25 +88,15 @@ class Font {
 
       for (final i in range(0, nameRecordCount)) {
         var record = NameRecord(
-            platformID: int.parse(bytes.sublist(position, position + 2).toHex(),
-                radix: 16),
-            encodingID: int.parse(
-                bytes.sublist(position + 2, position + 4).toHex(),
-                radix: 16),
-            languageID: int.parse(
-                bytes.sublist(position + 4, position + 6).toHex(),
-                radix: 16),
-            nameID: int.parse(bytes.sublist(position + 6, position + 8).toHex(),
-                radix: 16),
-            stringLength: int.parse(
-                bytes.sublist(position + 8, position + 10).toHex(),
-                radix: 16),
-            stringOffset: int.parse(
-                bytes.sublist(position + 10, position + 12).toHex(),
-                radix: 16),
+            platformID: bytes.readU16BE(position, position + 2),
+            encodingID: bytes.readU16BE(position + 2, position + 4),
+            languageID: bytes.readU16BE(position + 4, position + 6),
+            nameID: bytes.readU16BE(position + 6, position + 8),
+            stringLength: bytes.readU16BE(position + 8, position + 10),
+            stringOffset: bytes.readU16BE(position + 10, position + 12),
             name: '');
 
-        if (record.nameID! == 4) {
+        if (isValidNameID(record.nameID!)) {
           var startOffset =
               nameTableOffset + record.stringOffset! + storageOffset;
           var nameRecordBuffer =
@@ -141,7 +115,11 @@ class Font {
         print('이 폰트의 이름은 {0} 입니다'.replaceAll('{0}', record.name!));
       }
     } catch (e) {
-      log(e.toString());
+      print(e.toString());
     }
+  }
+
+  bool isValidNameID(int nameID) {
+    return nameID == 4;
   }
 }
