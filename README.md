@@ -12,7 +12,7 @@ font:
     localPath: fonts/NanumGothicCoding.ttf
 ```
 
-폰트 파서를 실행하려면 다음과 같이 하세요. 테스트 폰트는 나눔고딩폰트입니다.
+폰트 파서를 실행하려면 다음과 같이 하세요. 테스트 폰트는 나눔고딕코딩입니다.
 
 ```bash
 dart bin/dart_font_parser.dart --font=NanumGothicCoding
