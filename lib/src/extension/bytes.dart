@@ -13,7 +13,7 @@ extension ByteEx on String {
     var endOffset = startOffset + 2;
     final HIBYTE = substring(startOffset, endOffset + 2);
     final LOBYTE = substring(endOffset + 2, endOffset + 4);
-    return int.parse(HIBYTE + LOBYTE, radix: 16);
+    return int.parse(LOBYTE + HIBYTE, radix: 16);
   }
 }
 
