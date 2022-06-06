@@ -1,3 +1,7 @@
 font:
     remotePath: https://github.com/biud436/font-parser/raw/main/res/NanumGothicCoding.ttf
     localPath: fonts/NanumGothicCoding.ttf
+message:
+    DETECT_NAME_TABLE: 이름 테이블이 감지되었습니다.
+    NOT_FOUND_NAME_TABLE: 이름 테이블을 찾지 못했습니다.
+    GET_FONT_NAME: 이 폰트의 이름은 {0} 입니다

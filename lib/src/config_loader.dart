@@ -15,6 +15,7 @@ class ConfigLoader {
 
   bool get ready => _isReady;
   dynamic get items => _slots;
+  dynamic get message => _slots['message'];
 
   /// `config.yaml` 파일을 비동기로 읽습니다.
   Future<void> readConfigFile() async {

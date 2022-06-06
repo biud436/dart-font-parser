@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dart_font_parser/src/config_loader.dart';
 import 'package:dart_font_parser/src/font/offset_table.dart';
 import 'name_record.dart';
 import '../extension/bytes.dart';
@@ -67,7 +68,7 @@ class Font {
       }
 
       if (!isFoundNameTable) {
-        throw Exception('이름 테이블을 찾지 못했습니다.');
+        throw Exception(ConfigLoader().message['NOT_FOUND_NAME_TABLE']);
       }
 
       position = nameTableOffset;
@@ -83,7 +84,7 @@ class Font {
       position += 6;
 
       if (formatSelector != 0) {
-        print('이름 테이블이 감지되었습니다.');
+        print(ConfigLoader().message['DETECT_NAME_TABLE']);
       }
 
       var nameRecords = <NameRecord>[];
@@ -114,7 +115,7 @@ class Font {
       }
 
       for (final record in nameRecords) {
-        print('이 폰트의 이름은 {0} 입니다'.replaceAll('{0}', record.name!));
+        print(ConfigLoader().message['GET_FONT_NAME'].replaceAll('{0}', record.name!));
       }
     } catch (e) {
       print(e.toString());
